@@ -28,18 +28,17 @@ namespace Reservroom
                     new DateTime(2000, 1, 2)));
 
                 hotel.MakeReservation(new Reservation(
-                    new RoomID(1, 3),
+                    new RoomID(1, 4),
                     "PO",
                     new DateTime(2000, 1, 1),
                     new DateTime(2000, 1, 4)));
 
-                IEnumerable<Reservation> reservations = hotel.GetReservationsForUser("IU");
+                IEnumerable<Reservation> reservations = hotel.GetAllReservations();
             }
             catch (ReservationConflictException ex)
             {
 
             }
-
 
             base.OnStartup(e);
         }
