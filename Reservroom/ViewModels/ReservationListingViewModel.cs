@@ -20,9 +20,9 @@ namespace Reservroom.ViewModels
         {
             _reservations = new ObservableCollection<ReservationViewModel>();
 
-            _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(1, 2), "IU", DateTime.Now, DateTime.Now)));
-            _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(3, 2), "PO", DateTime.Now, DateTime.Now)));
-            _reservations.Add(new ReservationViewModel(new Reservation(new RoomID(2, 4), "OK", DateTime.Now, DateTime.Now)));
+            //_reservations.Add(new ReservationViewModel(new Reservation(new RoomID(1, 2), "IU", DateTime.Now, DateTime.Now)));
+            //_reservations.Add(new ReservationViewModel(new Reservation(new RoomID(3, 2), "PO", DateTime.Now, DateTime.Now)));
+            //_reservations.Add(new ReservationViewModel(new Reservation(new RoomID(2, 4), "OK", DateTime.Now, DateTime.Now)));
         }
     }
 }
