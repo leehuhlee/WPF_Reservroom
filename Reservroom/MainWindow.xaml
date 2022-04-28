@@ -5,15 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reservroom" 
         xmlns:views="clr-namespace:Reservroom.Views" 
-        xmlns:viewmodels="clr-namespace:Reservroom.ViewModels" 
-        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        xmlns:vms="clr-namespace:Reservroom.ViewModels" 
         mc:Ignorable="d"
         Title="Reservroom"
         Height="450" 
         Width="800"
         FontSize="14">
     <Grid Margin="20 10" MaxWidth="600">
-        <views:MakeReservationView DataContext="{Binding CurrentViewModel}"/>
-        <!--<views:ReservationListringView/>-->
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:MakeReservationViewModel}">
+                <views:MakeReservationView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:ReservationListingViewModel}">
+                <views:ReservationListringView/>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ContentControl Content="{Binding CurrentViewModel}"/>
     </Grid>
 </Window>

@@ -1,5 +1,7 @@
 ﻿using Reservroom.Commands;
 using Reservroom.Models;
+using Reservroom.Services;
+using Reservroom.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,10 +86,10 @@ namespace Reservroom.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public MakeReservationViewModel(Hotel hotel)
+        public MakeReservationViewModel(Hotel hotel, NavigationService reservationViewNavigationService)
         {
-            SubmitCommand = new MakeReservationCommand(this, hotel);
-            CancelCommand = new CancelMakeReservationCommand();
+            SubmitCommand = new MakeReservationCommand(this, hotel, reservationViewNavigationService);
+            CancelCommand = new NavigateCommand(reservationViewNavigationService);
         }
     }
 }
