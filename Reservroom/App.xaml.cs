@@ -25,6 +25,7 @@ namespace Reservroom
     {
         private const string CONNECTION_STRING = "Data Source=reservroom.db";
         private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly NavigationStore _navigationStore;
         private readonly ReservroomDbContextFactory _reservroomDbContextFactory;
 
@@ -40,6 +41,7 @@ namespace Reservroom
 
             _hotel = new Hotel("Hotel Del Luna", reservationBook);
             _navigationStore = new NavigationStore();
+            _hotelStore = new HotelStore(_hotel);
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -62,12 +64,12 @@ namespace Reservroom
 
         private MakeReservationViewModel CreateMakeReservationViewModel()
         {
-            return new MakeReservationViewModel(_hotel, new NavigationService(_navigationStore, CreateReservationViewModel));
+            return new MakeReservationViewModel(_hotelStore, new NavigationService(_navigationStore, CreateReservationViewModel));
         }
 
         private ReservationListingViewModel CreateReservationViewModel()
         {
-            return ReservationListingViewModel.LoadViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
+            return ReservationListingViewModel.LoadViewModel(_hotelStore, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
         }
     }
 }

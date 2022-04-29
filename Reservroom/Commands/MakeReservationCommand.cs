@@ -1,6 +1,7 @@
 ﻿using Reservroom.Extensions;
 using Reservroom.Models;
 using Reservroom.Services;
+using Reservroom.Stores;
 using Reservroom.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,15 @@ namespace Reservroom.Commands
     public class MakeReservationCommand : AsyncCommandBase
     {
         private readonly MakeReservationViewModel _makeReservationViewModel;
-        private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly NavigationService _reservationViewNavigationService;
 
         public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, 
-            Hotel hotel,
+            HotelStore hotelStore,
             NavigationService reservationViewNavigationService)
         {
             _makeReservationViewModel = makeReservationViewModel;
-            _hotel = hotel;
+            _hotelStore = hotelStore;
             _reservationViewNavigationService = reservationViewNavigationService;
 
             _makeReservationViewModel.PropertyChanged += OnViewModelPropertyChanged;
@@ -36,7 +37,7 @@ namespace Reservroom.Commands
                 base.CanExecute(parameter);
         }
 
-        public override async void Execute(object parameter)
+        public override async Task ExecuteAsync(object parameter)
         {
             Reservation reservation = new Reservation(
                 new RoomID(_makeReservationViewModel.FloorNumber, _makeReservationViewModel.RoomNumber),
@@ -47,26 +48,21 @@ namespace Reservroom.Commands
 
             try
             {
-                await _hotel.MakeReservation(reservation);
+                await _hotelStore.MakeReservation(reservation);
                 MessageBox.Show("Successfully reserved room.", "Success",
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 _reservationViewNavigationService.Navigate();
             }
             catch (ReservationConflictException)
             {
-                MessageBox.Show("This room is already taken.", "Error", 
+                MessageBox.Show("This room is already taken.", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Failed to make reservation.", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        public override Task ExecuteAsync(object parameter)
-        {
-            throw new NotImplementedException();
         }
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
