@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reservroom.Views" 
              xmlns:viewmodels="clr-namespace:Reservroom.ViewModels" 
-             d:DataContext="{d:DesignInstance Type=viewmodels:MakeReservationView}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
     <Grid Grid.IsSharedSizeScope="True">
@@ -97,7 +96,6 @@
                 Margin="10 5 0 0" 
                 SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-
         <StackPanel 
             Grid.Row="4" 
             Margin="0 25 0 0"
