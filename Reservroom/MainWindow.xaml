@@ -11,7 +11,7 @@
         Height="450" 
         Width="800"
         FontSize="14">
-    <ScrollViewer>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20 10" MaxWidth="600">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type vms:MakeReservationViewModel}">

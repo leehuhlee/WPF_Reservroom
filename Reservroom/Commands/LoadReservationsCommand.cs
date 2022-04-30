@@ -23,9 +23,12 @@ namespace Reservroom.Commands
             _hotelStore = hotelStore;
             _viewModel = viewModel;
         }
-
+        
         public override async Task ExecuteAsync(object parameter)
         {
+            _viewModel.ErrorMessage = string.Empty;
+            _viewModel.IsLoading = true;
+
             try
             {
                 await _hotelStore.Load();
@@ -33,9 +36,10 @@ namespace Reservroom.Commands
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Failed to load reservations.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                _viewModel.ErrorMessage = "Failed to load reservations.";
             }
+
+            _viewModel.IsLoading = false;
         }
     }
 }

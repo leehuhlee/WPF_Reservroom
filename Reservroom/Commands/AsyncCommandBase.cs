@@ -35,10 +35,8 @@ namespace Reservroom.Commands
             {
                 await ExecuteAsync(parameter);
             }
-            finally
-            {
-                IsExecuting = false;
-            }
+            catch (Exception ex) { }
+            IsExecuting = false;
         }
 
         public abstract Task ExecuteAsync(object parameter);
