@@ -49,7 +49,7 @@ namespace Reservroom.Stores
 
         private void OnReservationMade(Reservation reservation)
         {
-            ReservationMade.Invoke(reservation);
+            ReservationMade?.Invoke(reservation);
         }
 
         private async Task Initialize()

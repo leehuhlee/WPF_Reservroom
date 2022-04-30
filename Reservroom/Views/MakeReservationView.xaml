@@ -4,11 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reservroom.Views" 
-             xmlns:viewmodels="clr-namespace:Reservroom.ViewModels" 
+             xmlns:viewmodels="clr-namespace:Reservroom.ViewModels" xmlns:custom="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -104,7 +108,31 @@
             <Button 
                 Margin="10 0 0 0" 
                 Command="{Binding CancelCommand}" 
-                Content="Cancel"/>
+                Content="Cancel">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSubmitting}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <custom:LoadingSpinner
+                Margin="10 0 0 0"
+                VerticalAlignment="Center"
+                Diameter="25"
+                IsLoading="{Binding IsSubmitting}"
+                Thickness="3"
+                Color="Black"/>
         </StackPanel>
+
+        <TextBlock
+            Grid.Row="5"
+            Margin="0 20 0 0"
+            Foreground="Red"
+            Text="{Binding SubmitErrorMessage}"
+            Visibility="{Binding HasSubmitErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

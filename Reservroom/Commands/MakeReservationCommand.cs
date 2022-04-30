@@ -1,4 +1,5 @@
-﻿using Reservroom.Extensions;
+﻿using Reservroom.Exceptions;
+using Reservroom.Extensions;
 using Reservroom.Models;
 using Reservroom.Services;
 using Reservroom.Stores;
@@ -32,13 +33,15 @@ namespace Reservroom.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(_makeReservationViewModel.Username) && 
-                _makeReservationViewModel.FloorNumber > 0 &&
+            return _makeReservationViewModel.CanCreateReservation &&
                 base.CanExecute(parameter);
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _makeReservationViewModel.SubmitErrorMessage = string.Empty;
+            _makeReservationViewModel.IsSubmitting = true;
+
             Reservation reservation = new Reservation(
                 new RoomID(_makeReservationViewModel.FloorNumber, _makeReservationViewModel.RoomNumber),
                 _makeReservationViewModel.Username,
@@ -55,20 +58,23 @@ namespace Reservroom.Commands
             }
             catch (ReservationConflictException)
             {
-                MessageBox.Show("This room is already taken.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                _makeReservationViewModel.SubmitErrorMessage = "This room is already taken on those dates.";
             }
-            catch (Exception ex)
+            catch (InvalidReservationTimeRangeException)
             {
-                MessageBox.Show("Failed to make reservation.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                _makeReservationViewModel.SubmitErrorMessage = "Start date must be before end date.";
             }
+            catch (Exception)
+            {
+                _makeReservationViewModel.SubmitErrorMessage = "Failed to make reservation.";
+            }
+
+            _makeReservationViewModel.IsSubmitting = false;
         }
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(MakeReservationViewModel.Username) || 
-                e.PropertyName == nameof(MakeReservationViewModel.FloorNumber))
+            if(e.PropertyName == nameof(MakeReservationViewModel.CanCreateReservation))
             {
                 OnCanExecutedChanged();
             }

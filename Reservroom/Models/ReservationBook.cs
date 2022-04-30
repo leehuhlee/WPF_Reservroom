@@ -1,4 +1,5 @@
-﻿using Reservroom.Extensions;
+﻿using Reservroom.Exceptions;
+using Reservroom.Extensions;
 using Reservroom.Services.ReservationConflictValidators;
 using Reservroom.Services.ReservationCreators;
 using Reservroom.Services.ReservationProviders;
@@ -30,6 +31,11 @@ namespace Reservroom.Models
 
         public async Task AddReservation(Reservation reservation)
         {
+            if(reservation.StartTime > reservation.EndTime)
+            {
+                throw new InvalidReservationTimeRangeException(reservation);
+            }
+
             Reservation conflictingReservation  = await _reservationConflictValidator.GetConflictingReservation(reservation);
 
             if(conflictingReservation != null)
